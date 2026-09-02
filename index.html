@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A calm, focused personal expense tracker.">
+  <title>Ledger | Personal Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#top" aria-label="Ledger home">
+        <span class="brand-mark"><i data-lucide="wallet-cards"></i></span>
+        <span>ledger<span class="brand-dot">.</span></span>
+      </a>
+      <div class="sidebar-rule"></div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <a class="nav-item active" href="#overview"><i data-lucide="layout-dashboard"></i><span>Overview</span></a>
+        <a class="nav-item" href="#insights"><i data-lucide="chart-no-axes-combined"></i><span>Insights</span></a>
+        <a class="nav-item" href="#expenses"><i data-lucide="receipt"></i><span>Expenses</span></a>
+      </nav>
+      <div class="sidebar-note">
+        <span class="note-icon"><i data-lucide="sparkles"></i></span>
+        <strong>Small steps add up.</strong>
+        <p>Keep an eye on the little things and the big picture takes care of itself.</p>
+      </div>
+      <div class="sidebar-footer"><span class="status-dot"></span> Your data stays on this device</div>
+    </aside>
+
+    <main class="main-content" id="top">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PERSONAL FINANCE / <span id="current-month">MONTH</span></p>
+          <h1>Good morning <span class="wave">✦</span></h1>
+        </div>
+        <button class="button button-primary" id="add-expense-button"><i data-lucide="plus"></i> Add expense</button>
+      </header>
+
+      <section class="overview-section" id="overview">
+        <div class="section-heading"><div><p class="eyebrow">AT A GLANCE</p><h2>Your money, in focus.</h2></div><span class="date-badge" id="today-label"></span></div>
+        <div class="summary-grid">
+          <article class="summary-card total-card"><div class="card-label"><span class="icon-wrap coral"><i data-lucide="circle-dollar-sign"></i></span><span>Total spending</span></div><strong id="total-spending">$0.00</strong><p class="card-foot" id="total-foot">Across all expenses</p></article>
+          <article class="summary-card"><div class="card-label"><span class="icon-wrap mint"><i data-lucide="list-checks"></i></span><span>Number of expenses</span></div><strong id="expense-count">0</strong><p class="card-foot">Recorded transactions</p></article>
+          <article class="summary-card"><div class="card-label"><span class="icon-wrap yellow"><i data-lucide="scale"></i></span><span>Average expense</span></div><strong id="average-expense">$0.00</strong><p class="card-foot">Per transaction</p></article>
+        </div>
+      </section>
+
+      <section class="insights-section" id="insights">
+        <div class="chart-panel panel"><div class="panel-heading"><div><p class="eyebrow">BREAKDOWN</p><h3>Where it goes</h3></div><button class="icon-button" id="reset-data-button" title="Reset demo data" aria-label="Reset demo data"><i data-lucide="rotate-ccw"></i></button></div><div class="chart-wrap"><canvas id="category-chart"></canvas><div class="chart-empty" id="chart-empty">Add an expense to see your breakdown.</div></div></div>
+        <div class="category-panel panel"><div class="panel-heading"><div><p class="eyebrow">TOP CATEGORIES</p><h3>Spending rhythm</h3></div></div><div class="category-list" id="category-list"></div></div>
+      </section>
+
+      <section class="expenses-section" id="expenses">
+        <div class="expenses-heading"><div><p class="eyebrow">TRANSACTIONS</p><h2>Recent expenses</h2></div><span class="count-pill" id="visible-count">0 shown</span></div>
+        <div class="toolbar"><label class="search-box"><i data-lucide="search"></i><input id="search-input" type="search" placeholder="Search expenses" aria-label="Search expenses"></label><label class="select-wrap"><span>Category</span><select id="category-filter"><option value="all">All categories</option></select></label><label class="select-wrap"><span>Sort by</span><select id="sort-select"><option value="date-desc">Newest first</option><option value="date-asc">Oldest first</option><option value="amount-desc">Highest amount</option><option value="amount-asc">Lowest amount</option></select></label></div>
+        <div class="table-panel panel"><div class="expense-table-head"><span>DESCRIPTION</span><span>AMOUNT</span><span>CATEGORY</span><span>DATE</span><span></span></div><div class="expense-list" id="expense-list"></div><div class="empty-state" id="empty-state" hidden><span class="empty-icon"><i data-lucide="notebook-pen"></i></span><h3>No expenses found</h3><p>Try another filter or add your first expense.</p><button class="button button-secondary" id="empty-add-button"><i data-lucide="plus"></i> Add expense</button></div></div>
+      </section>
+      <footer class="main-footer">Ledger / A clearer view of everyday spending</footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="close-button" id="close-modal" aria-label="Close dialog"><i data-lucide="x"></i></button><p class="eyebrow" id="modal-eyebrow">NEW TRANSACTION</p><h2 id="modal-title">Add an expense</h2><p class="modal-subtitle">A few details is all it takes to keep your ledger current.</p><form id="expense-form"><label>Description<input required id="description-input" name="description" placeholder="e.g. Weekly groceries"></label><div class="form-row"><label>Amount<input required id="amount-input" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00"></label><label>Category<select required id="category-input" name="category"><option value="Food">Food</option><option value="Transport">Transport</option><option value="Shopping">Shopping</option><option value="Bills">Bills</option><option value="Health">Health</option><option value="Entertainment">Entertainment</option><option value="Other">Other</option></select></label></div><label>Date<input required id="date-input" name="date" type="date"></label><button class="button button-primary form-submit" type="submit"><i data-lucide="check"></i><span id="submit-label">Save expense</span></button></form></section></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="app.js"></script>
+</body>
+</html>
