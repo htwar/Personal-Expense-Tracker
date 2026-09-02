@@ -42,6 +42,7 @@ function renderExpenses() {
   $('#visible-count').textContent = `${visible.length} shown`;
   $('#expense-list').innerHTML = visible.map((expense, index) => `<div class="expense-row" style="animation-delay:${index * 40}ms"><div class="expense-description"><span class="expense-symbol">${expense.description.trim().charAt(0).toUpperCase()}</span><span>${escapeHtml(expense.description)}</span></div><span class="expense-amount">${money(expense.amount)}</span><span class="expense-category">${expense.category}</span><span class="expense-date">${readableDate(expense.date)}</span><span class="row-actions"><button title="Edit expense" aria-label="Edit ${escapeHtml(expense.description)}" data-action="edit" data-id="${expense.id}"><i data-lucide="pencil"></i></button><button title="Delete expense" aria-label="Delete ${escapeHtml(expense.description)}" data-action="delete" data-id="${expense.id}"><i data-lucide="trash-2"></i></button></span></div>`).join('');
   $('#empty-state').hidden = visible.length > 0;
+  if (window.lucide) lucide.createIcons();
 }
 function renderChart() {
   const totals = categories.map((category) => expenses.filter((expense) => expense.category === category).reduce((sum, expense) => sum + expense.amount, 0));
